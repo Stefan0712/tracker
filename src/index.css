@@ -1,1 +1,103 @@
 @import "tailwindcss";
+
+@utility option-input {
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    padding-left: 10px;
+    font-weight: 500;
+    text-size: 15px;
+}
+@utility text-input {
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    background-color: white;
+    color: black;
+    border: none;
+    padding-left: 10px;
+}
+@utility fieldset {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+@utility label {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 500;
+}
+@utility tag-item {
+    padding-left: 10px;
+    padding-right: 5px;
+    height: 40px;
+    border-radius: 5px;
+    display: flex;
+    gap: 2px;
+    align-items: center;
+    background-color: rgba(255, 255, 255, 0.2);
+}
+@utility modal {
+    width: 100vw;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 100;
+    padding: 20px;
+    background-color: black;
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+}
+@utility primary-button {
+    height: 50px;
+    min-width: 50px;
+    border-radius: 5px;
+    background-color: orange;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+@utility secondary-button {
+    width: 100%;
+    height: 50px;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: gray;
+    color: white;
+}
+
+@utility form-section {
+    background-color: #22292b;
+    border-radius: 10px;
+    gap: 8px;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    padding-bottom: 16px;
+}
+
+
+:root {
+    --bg-main: black;
+    --bg-secondary: gray;
+
+    --input-radius: 10px;
+    --button-radius: 10px;
+
+    --input-border: 1px;
+    --button-border: 1px;
+
+    --brand-color: red;
+    --brand-secondary-color: orange;
+}
+
+[data-theme="dark"] {
+    --bg-main: black;
+}
+
+@theme {
+    --color-main: val(--bg-main);
+}

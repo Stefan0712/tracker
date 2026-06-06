@@ -1,26 +1,28 @@
 import { Routes, Route, Link, Outlet } from 'react-router-dom';
-import Library from './components/Layout/Library';
+import Library from './components/Layout/Library/Library';
 import { Calendar, Home, List, Settings } from 'lucide-react';
 import ManageExercise from './components/Exercise/ManageExercise';
+import { ToastProvider } from './context/ToastContext';
 
 
 const btnStyle = 'w-full h-full items-center justify-center flex flex-col gap-1 text-black/50';
 
 function App() {
   return (
-    <Routes>
+    <ToastProvider>
+      <Routes>
+        <Route element={<MainLayout />}>
+          <Route index element={<div className="p-4">Home Dashboard</div>} /> 
+          <Route path="/library" element={<Library />} />
+          <Route path="/plan" element={<div className="p-4">Calendar Page</div>} />
+          <Route path="/settings" element={<div className="p-4">Settings</div>} />
+        </Route>
 
-      <Route element={<MainLayout />}>
-        <Route index element={<div className="p-4">Home Dashboard</div>} /> 
-        <Route path="/library" element={<Library />} />
-        <Route path="/plan" element={<div className="p-4">Calendar Page</div>} />
-        <Route path="/settings" element={<div className="p-4">Settings</div>} />
-      </Route>
+        <Route path="/active" element={<ActiveWorkout />} />
+        <Route path='/exercise/new' element={<ManageExercise /> } />
 
-      <Route path="/active" element={<ActiveWorkout />} />
-      <Route path='/exercise/new' element={<ManageExercise /> } />
-
-    </Routes>
+      </Routes>
+    </ToastProvider>
   );
 }
 

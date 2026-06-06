@@ -1,16 +1,24 @@
+export const TRACKING_TYPES = ['number', 'time', 'boolean', 'text'] as const;
+export const NUMBER_UNITS = ['kg', 'lbs', 'km', 'mi', 'm', 'reps'] as const;
+export const TIME_UNITS = ['sec', 'min', 'hrs'] as const;
+
+export type TrackingType = typeof TRACKING_TYPES[number];
+export type NumberUnit = typeof NUMBER_UNITS[number];
+export type TimeUnit = typeof TIME_UNITS[number];
+
+export const ALL_UNITS = [...NUMBER_UNITS, ...TIME_UNITS] as const;
+export type Unit = typeof ALL_UNITS[number];
+
 export type ExerciseCategory = 'strength' | 'cardio' | 'mobility' | 'isometric' | 'plyometric' | 'other';
 
-export type TrackingType = 'number' | 'time' | 'boolean' | 'text';
-
-export type NumberUnit = 'kg' | 'lbs' | 'km' | 'mi' | 'm';
-
-export type TimeUnit = 'sec' | 'min' | 'hrs';
+export type ExerciseDifficulty = 'Beginner' | 'Intermediate' | 'Advanced';
 
 export interface TrackingField {
-  id: string;
+  _id: string;
   name: string;
-  type: TrackingType;
-  unit?: NumberUnit | TimeUnit;
+  type?: TrackingType;
+  target: number;
+  unit?: Unit;
   isRequired: boolean;
 }
 
@@ -19,17 +27,17 @@ export interface Exercise {
   name: string;
   description?: string;
   category: ExerciseCategory;
-  muscles: MuscleDefinition[];
-  tags: string[];
-  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
-  equipment: Equipment[];
-  trackingFields: TrackingField[];
-  isUnilateral: boolean;
+  muscles?: MuscleDefinition[];
+  tags?: string[];
+  difficulty: ExerciseDifficulty;
+  equipment?: Equipment[];
+  trackingFields?: TrackingField[];
+  isUnilateral?: boolean;
   estimatedDuration?: number;
-  instructions: string[];
+  instructions?: string[];
   imgUrl?: string;
   videoUrl?: string;
-  notes?: string;
+  notes?: string[];
   authorId: string;
   isCurated: boolean;
   isPrivate: boolean;
@@ -66,7 +74,7 @@ export interface Equipment {
   _id: string;
   name: string;
   description?: string;
-  measurements: EquipmentMeasurement[];
+  measurements?: EquipmentMeasurement[];
   imgUrl?: string;
   isCustom: boolean;
   createdAt: string;
