@@ -1,5 +1,5 @@
 import { Check, Plus, X } from "lucide-react"
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { type MuscleDefinition } from "../../types/types";
 import { MUSCLES } from "../../constants/muscles";
 
@@ -30,24 +30,28 @@ const MusclePicker: React.FC<IProps> = ({muscles, addMuscle, removeMuscle, close
             return (bExists ? 1 : 0) - (aExists ? 1 : 0);
         });
     };
+
+    const results = useMemo(()=>{
+        return getOrderedMuscles(MUSCLES.filter(i=>i.name.toLowerCase().includes(query.trim().toLowerCase())));
+    },[query])
     return (
         <div className="modal h-full grid grid-rows-[50px_1fr_50px_50px] gap-3">
-            <div className="w-full h-[50px] flex items-center justify-between">
+            <div className="w-full h-12.5 flex items-center justify-between">
                 <h1>Muscles</h1>
                 <button onClick={close}>
                     <X />
                 </button>
             </div>
             <div className="bg-zinc-800 flex flex-col overflow-y-auto p-2 rounded">
-                {MUSCLES?.length > 0 ? getOrderedMuscles(MUSCLES).map((item: MuscleDefinition)=><div key={item._id} className="w-full h-12 shrink-0 grid grid-cols-[1fr_40px]">
+                {results?.length > 0 ? results.map((item: MuscleDefinition)=><div key={item._id} className="w-full h-12 shrink-0 grid grid-cols-[1fr_40px]">
                     <b>{item.name}</b>
                     <button onClick={()=>toggleMuscle(item)}>
                         {muscles.some(muscle => muscle._id === item._id) ? <Check /> : <Plus />}
                     </button>
                 </div>) : <p>No muscles to show</p>}
             </div>
-            <div className="w-full h-[50px] grid grid-cols-[1fr_50px] gap-2">
-                <input type="text" className="text-input" value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Tag..."/>
+            <div className="w-full h-12.5 grid grid-cols-[1fr_50px] gap-2">
+                <input type="text" className="text-input" value={query} onChange={(e)=>setQuery(e.target.value)} placeholder="Muscle name"/>
                 <button className="primary-button">
                     <Plus />
                 </button>

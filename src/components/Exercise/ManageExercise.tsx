@@ -134,7 +134,7 @@ const ManageExercise = () => {
         }
     }
     return (
-        <div className="w-screen h-screen grid grid-rows-[60px_1fr] bg-zinc-950 text-white/80 overflow-hidden">
+        <div className="w-screen h-dscreen grid grid-rows-[60px_1fr] bg-zinc-950 text-white/80 overflow-hidden">
                 <div className="w-full h-15 flex px-4 items-center justify-between">
                     <button onClick={()=>navigate('/library')}>
                         <ArrowLeft />

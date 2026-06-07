@@ -40,7 +40,8 @@
 }
 @utility modal {
     width: 100vw;
-    position: absolute;
+    height: 100dvh;
+    position: fixed;
     bottom: 0;
     left: 0;
     z-index: 100;
