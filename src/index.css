@@ -79,20 +79,37 @@
     padding: 8px;
     padding-bottom: 16px;
 }
-
+@utility no-items-text {
+    width: 100%;
+    padding: 50px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.6);
+}
 
 :root {
-    --bg-main: black;
+    --bg-main: rgb(15, 15, 15);
     --bg-secondary: gray;
+
+    --text-primary: rgba(255, 255, 255, 1);
+    --text-muted: rgba(255, 255, 255, 0.5);
 
     --input-radius: 10px;
     --button-radius: 10px;
 
-    --input-border: 1px;
-    --button-border: 1px;
+    --input-border: 1px solid rgba(255, 255, 255, 0.1);
+    --button-border: 1px solid rgba(255, 255, 255, 0.1);
+    --input-focus-border: 1px solid orange;
+
+    --input-background: rgba(255, 255, 255, 1); 
 
     --brand-color: red;
     --brand-secondary-color: orange;
+
+    /* List items */
+    --bg-item: rgb(50, 50, 50);
+    --border-color-item: rgba(255, 255, 255, 0.1);
 }
 
 [data-theme="dark"] {
@@ -100,5 +117,7 @@
 }
 
 @theme {
-    --color-main: val(--bg-main);
+    --color-main: var(--bg-main);
+    --color-secondary: var(--bg-secondary);
+    --color-item: var(--bg-item);
 }
