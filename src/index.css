@@ -87,6 +87,11 @@
     justify-content: center;
     color: rgba(255, 255, 255, 0.6);
 }
+@utility content-container {
+    width: 100dvw;
+    height: calc(100dvh - var(--nav-height));
+    overflow: hidden;
+}
 
 :root {
     --bg-main: rgb(15, 15, 15);
@@ -110,6 +115,9 @@
     /* List items */
     --bg-item: rgb(50, 50, 50);
     --border-color-item: rgba(255, 255, 255, 0.1);
+
+    --nav-height: 60px;
+    --content-height: calc(100dvh - var(--nav-height));
 }
 
 [data-theme="dark"] {
@@ -119,5 +127,7 @@
 @theme {
     --color-main: var(--bg-main);
     --color-secondary: var(--bg-secondary);
-    --color-item: var(--bg-item);
+    --color-item: var(--bg-item); 
+    --height-content: var(--content-height);
+    --height-nav: var(--nav-height);
 }

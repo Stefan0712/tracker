@@ -1,21 +1,25 @@
 import { ArrowLeft, Plus, Save, Search, X } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { type MuscleDefinition, type ExerciseCategory, type Equipment, type TrackingField, type NumberUnit, type TimeUnit, type Unit, ALL_UNITS, type Exercise, type ExerciseDifficulty } from "../../types/types";
 import MusclePicker from "../modals/MusclePicker";
 import EquipmentPicker from "../modals/EquipmentPicker";
 import ObjectID from "bson-objectid";
 import { db } from "../../db";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useToast } from "../../context/ToastContext";
 
 
 const ManageExercise = () => {
 
+    const {id} = useParams();
+
     const navigate = useNavigate();
     const { addToast } = useToast();
 
+    const [existingItem, setExistingItem] = useState<null | Exercise>(null)
 
-    const [name, setName] = useState('')
+
+    const [name, setName] = useState(existingItem?.name ?? '')
     const [description, setDescription] = useState('')
     const [difficulty, setDifficulty] = useState<ExerciseDifficulty>('Beginner');
     const [estimatedDuration, setEstimatedDuration] = useState(0);
@@ -54,6 +58,27 @@ const ManageExercise = () => {
     const [showNewNote, setShowNewNote] = useState(false);
 
 
+    const populateFields = async (itemId: string) => {
+        try {
+            const exerciseData = await db.exercises.get(itemId);
+            if(exerciseData){
+                setExistingItem(exerciseData);
+            } else {
+                addToast("Exercise is invalid.", "error")
+            }
+        } catch (error) {
+            console.error(error)
+            addToast("There has been an error fetching the exercise", "error");
+        }
+    }
+
+
+    useEffect(()=>{
+        if(id){
+            populateFields(id);
+        }
+    }, [id])
+
     const handleAddInstruction = () => {
         if(instructionInput.length > 0) {
             setInstructions(prev=>[...prev, instructionInput])
@@ -67,8 +92,6 @@ const ManageExercise = () => {
             setNoteInput('')
         }
     }
-
-
 
 
     const handleAddTag = () => {
@@ -127,14 +150,14 @@ const ManageExercise = () => {
                 updatedAt: dateNow
             }
             console.log(newExercise)
-            //await db.exercises.add(newExercise);
-            //navigate('/library')
+            await db.exercises.add(newExercise);
+            navigate('/library')
         } else {
             addToast('Name, category, or difficulty is invalid.', "error");
         }
     }
     return (
-        <div className="w-screen h-dscreen grid grid-rows-[60px_1fr] bg-zinc-950 text-white/80 overflow-hidden">
+        <div className="w-screen h-dvh grid grid-rows-[60px_1fr] bg-zinc-950 text-white/80 overflow-hidden">
                 <div className="w-full h-15 flex px-4 items-center justify-between">
                     <button onClick={()=>navigate('/library')}>
                         <ArrowLeft />

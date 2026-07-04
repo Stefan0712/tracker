@@ -63,7 +63,7 @@ const Library = () => {
 
 
     return (
-        <div className="w-screen h-screen bg-main flex flex-col text-white">
+        <div className="content-container bg-main flex flex-col text-white">
             {selectedExercise ? <ViewExercise id={selectedExercise} /> : null}
             <div className="w-full h-15 flex px-4 items-center justify-between">
                 <h1 className="font-bold text-lg">Library</h1>
@@ -71,7 +71,7 @@ const Library = () => {
                     <Plus />
                 </Link>
             </div>
-            <div className="w-full flex items-center px-4 gap-2">
+            <div className="w-full flex items-center px-4 gap-2 overflow-y-auto">
                 <div className="flex items-center gap-2 mr-auto">
                     <button 
                         className={`h-10 px-2 border border-black-1 rounded-lg ${type === 'exercises' ? 'bg-zinc-900 text-white' : ''}`}
