@@ -19,7 +19,7 @@ const ManageExercise = () => {
     const [existingItem, setExistingItem] = useState<null | Exercise>(null)
 
 
-    const [name, setName] = useState(existingItem?.name ?? '')
+    const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [difficulty, setDifficulty] = useState<ExerciseDifficulty>('Beginner');
     const [estimatedDuration, setEstimatedDuration] = useState(0);
@@ -63,8 +63,22 @@ const ManageExercise = () => {
             const exerciseData = await db.exercises.get(itemId);
             if(exerciseData){
                 setExistingItem(exerciseData);
+
+                // Populate individual states
+
+                setName(exerciseData.name);
+                setDescription(exerciseData.description ?? '');
+                setDifficulty(exerciseData.difficulty);
+                setEstimatedDuration(exerciseData.estimatedDuration ?? 0);
+                setCategory(exerciseData.category);
+                setMuscles(exerciseData.muscles ?? []);
+                setTags(exerciseData.tags ?? []);
+                setEquipment(exerciseData.equipment ?? []);
+                setFields(exerciseData.trackingFields ?? []);
+                setInstructions(exerciseData.instructions ?? []);
+                setNotes(exerciseData.notes ?? []);
             } else {
-                addToast("Exercise is invalid.", "error")
+                addToast("Exercise is invalid.", "error");
             }
         } catch (error) {
             console.error(error)
@@ -130,7 +144,7 @@ const ManageExercise = () => {
         if(name.length > 0 && category && difficulty) {
             const dateNow = new Date().toISOString();
             const newExercise: Exercise = {
-                _id: ObjectID().toHexString(),
+                _id: existingItem && existingItem._id ? existingItem._id : ObjectID().toHexString(),
                 name,
                 description,
                 category,
@@ -150,7 +164,7 @@ const ManageExercise = () => {
                 updatedAt: dateNow
             }
             console.log(newExercise)
-            await db.exercises.add(newExercise);
+            await db.exercises.put(newExercise);
             navigate('/library')
         } else {
             addToast('Name, category, or difficulty is invalid.', "error");

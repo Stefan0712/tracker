@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { db } from "../../db";
 import type { Exercise } from "../../types/types";
+import { Link } from "react-router-dom";
 
 interface ExerciseProps {
     id: string;
@@ -45,7 +46,7 @@ const ViewExercise: React.FC<ExerciseProps> = ({ id }) => {
             </div>
             <div className="w-full flex justify-between items-center gap-3">
                 <button className="border border-white/10 bg-red-500/90 px-2 text-white rounded">Delete</button>
-                <button className="border border-white/10 bg-zinc-500/90 px-2 text-white rounded">Edit</button>
+                <Link to={id ? `/exercise/${id}/edit` : '#'} className="border border-white/10 bg-zinc-500/90 px-2 text-white rounded">Edit</Link>
             </div>
             <div className={`${section}`}>
                 <label>Description</label>

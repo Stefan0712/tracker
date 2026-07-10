@@ -18,6 +18,7 @@ function App() {
         </Route>
 
         <Route path='/exercise/new' element={<ManageExercise /> } />
+        <Route path='/exercise/:id/edit' element={<ManageExercise /> } />
 
       </Routes>
     </ToastProvider>

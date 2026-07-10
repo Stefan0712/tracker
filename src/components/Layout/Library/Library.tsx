@@ -98,7 +98,7 @@ const Library = () => {
 
             <div className="flex flex-col gap-2 overflow-y-auto overflow-x-hidden p-2">
                 {
-                    type === 'exercises' ? exercises?.length > 0 ? exercises.map(item=><Exercise showExercise={()=>setSelectedExercise(item._id)} exercise={item} />) : <p className="no-items-text">No items to show</p> : workouts?.length > 0 ? workouts.map(item=><MockItem type="workout" item={item} />) : <p className="no-items-text">No workouts</p>
+                    type === 'exercises' ? exercises?.length > 0 ? exercises.map(item=><Exercise key={item._id} showExercise={()=>setSelectedExercise(item._id)} exercise={item} />) : <p className="no-items-text">No items to show</p> : workouts?.length > 0 ? workouts.map(item=><MockItem type="workout" item={item} />) : <p className="no-items-text">No workouts</p>
                 }
             </div>
         </div>
