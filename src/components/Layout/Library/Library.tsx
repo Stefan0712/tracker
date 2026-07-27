@@ -1,4 +1,4 @@
-import { Database, Plus, RefreshCcw } from "lucide-react"
+import { Database, Plus, PlusIcon, RefreshCcw } from "lucide-react"
 import { Link } from "react-router-dom";
 import { seedExercises } from "../../../helpers/seed";
 import { useEffect, useState } from "react";
@@ -7,6 +7,7 @@ import type { Exercise as IExercise, Workout } from "../../../types/types";
 import { useToast } from "../../../context/ToastContext";
 import Exercise from "./Exercise";
 import ViewExercise from "../../Exercise/ViewExercise";
+import NewLibraryItemMenu from "./NewLibraryItemMenu";
 
 
 const Library = () => {
@@ -20,6 +21,9 @@ const Library = () => {
 
     const [exercises, setExercises] = useState<IExercise[]>([])
     const [workouts, setWorkouts] = useState<Workout[]>([]);
+
+
+    const [showNewMenu, setShowNewMenu] = useState(false);
 
 
     const fetchExercises = async () => {
@@ -67,9 +71,9 @@ const Library = () => {
             {selectedExercise ? <ViewExercise id={selectedExercise} /> : null}
             <div className="w-full h-15 flex px-4 items-center justify-between">
                 <h1 className="font-bold text-lg">Library</h1>
-                <Link to={'/exercise/new'}>
-                    <Plus />
-                </Link>
+                <button onClick={fetchItems}>
+                    <RefreshCcw />
+                </button>
             </div>
             <div className="w-full flex items-center px-4 gap-2 overflow-y-auto">
                 <div className="flex items-center gap-2 mr-auto">
@@ -89,9 +93,6 @@ const Library = () => {
                 <button onClick={seedExercises}>
                     <Database />
                 </button>
-                <button onClick={fetchItems}>
-                    <RefreshCcw />
-                </button>
             </div>
 
             {/* Container for items */}
@@ -101,6 +102,11 @@ const Library = () => {
                     type === 'exercises' ? exercises?.length > 0 ? exercises.map(item=><Exercise key={item._id} showExercise={()=>setSelectedExercise(item._id)} exercise={item} />) : <p className="no-items-text">No items to show</p> : workouts?.length > 0 ? workouts.map(item=><MockItem type="workout" item={item} />) : <p className="no-items-text">No workouts</p>
                 }
             </div>
+
+            <button className="w-12 h-12 rounded-xl bg-zinc-700 flex items-center justify-center absolute right-4 bottom-(--absolute-bottom-15) z-10" onClick={()=>setShowNewMenu(true)}>
+                <PlusIcon />
+            </button>
+            {showNewMenu ? <NewLibraryItemMenu close={()=>setShowNewMenu(false)} /> : null}
         </div>
     )
 }

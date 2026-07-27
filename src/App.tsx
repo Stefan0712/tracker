@@ -3,6 +3,7 @@ import Library from './components/Layout/Library/Library';
 import ManageExercise from './components/Exercise/ManageExercise';
 import { ToastProvider } from './context/ToastContext';
 import Nav from './components/Layout/Nav';
+import ManageWorkout from './components/Workout/ManageWorkout/ManageWorkout';
 
 
 
@@ -19,6 +20,9 @@ function App() {
 
         <Route path='/exercise/new' element={<ManageExercise /> } />
         <Route path='/exercise/:id/edit' element={<ManageExercise /> } />
+
+        <Route path='/workout/new' element={<ManageWorkout /> } />
+
 
       </Routes>
     </ToastProvider>
