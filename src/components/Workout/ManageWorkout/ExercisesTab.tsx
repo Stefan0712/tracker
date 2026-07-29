@@ -4,6 +4,7 @@ import type { Exercise } from "../../../types/types";
 
 export interface WorkoutItem extends Exercise {
     type: string;
+    sourceId: string;
 }
 
 
@@ -21,7 +22,7 @@ export const ExercisesTab = () => {
                 <p>Total exercises: 15</p>
             </div>
             <div className="w-full h-full flex flex-col gap-2">
-                <p>No exercises added</p>
+                {items?.length > 0 ? items.map(item=><div key={item._id}>{item.name}</div>) : <p>No exercises added</p>}
             </div>
             <div className="w-full flex items-center justify-center gap-2">
                 <button className="h-full px-4 roudned bg-zinc-500 rounded">Add Break</button>
