@@ -4,9 +4,12 @@ import { Link } from "react-router-dom";
 import { ArrowLeft, Save } from "lucide-react";
 import { DetailsTab } from "./DetailsTab";
 import { ExercisesTab } from "./ExercisesTab";
+import { useToast } from "../../../context/ToastContext";
 
 
 const ManageWorkout = () => {
+
+    const { addToast } = useToast();
 
     const [currentTab, setCurrentTab] = useState('details')
 

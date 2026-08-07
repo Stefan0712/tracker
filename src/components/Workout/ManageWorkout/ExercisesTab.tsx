@@ -1,6 +1,7 @@
 import { useState } from "react"
 import { ExerciseDrawer } from "../../modals/ExerciseDrawer";
 import type { Exercise } from "../../../types/types";
+import { useToast } from "../../../context/ToastContext";
 
 export interface WorkoutItem extends Exercise {
     type: string;
@@ -10,11 +11,17 @@ export interface WorkoutItem extends Exercise {
 
 export const ExercisesTab = () => {
 
+    const { addToast } = useToast();
+
     const [showExerciseDrawer, setShowExerciseDrawer] = useState(false);
 
     const [items, setItems] = useState<WorkoutItem[]>([]);
 
 
+    const handleAddExercise = (exercise: WorkoutItem) => {
+        setItems(prev=>[...prev, exercise]);
+        addToast(`Added ${exercise.name}!`);
+    }
 
     return (
         <div className="w-full h-full px-4 grid grid-rows-[50px_1fr_50px] pb-4">
@@ -28,7 +35,7 @@ export const ExercisesTab = () => {
                 <button className="h-full px-4 roudned bg-zinc-500 rounded">Add Break</button>
                 <button className="h-full px-4 roudned bg-zinc-500 rounded" onClick={()=>setShowExerciseDrawer(true)}>Add Exercise</button>
             </div>
-            {showExerciseDrawer ? <ExerciseDrawer existingExercises={items.filter(item=>item.type === 'exercise')} addExercise={(exercise: WorkoutItem)=>setItems(prev=>[...prev, exercise])} close={()=>setShowExerciseDrawer(false)} /> : null}
+            {showExerciseDrawer ? <ExerciseDrawer existingExercises={items.filter(item=>item.type === 'exercise')} addExercise={(exercise: WorkoutItem)=>handleAddExercise(exercise)} close={()=>setShowExerciseDrawer(false)} /> : null}
         </div>
     )
     

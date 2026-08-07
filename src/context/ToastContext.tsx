@@ -41,17 +41,17 @@ export function ToastProvider({ children }: ToastProviderProps) {
       {children}
       
       {/* Global Toast Container */}
-      <div className="fixed top-12 right-0 z-50 flex flex-col gap-2 w-screen pointer-events-none px-2 max-h-[50vh] overflow-y-auto overflow-x-hidden">
+      <div className="fixed top-12 right-0 z-50 flex flex-col gap-2 w-screen pointer-events-none px-2 max-h-[50vh] overflow-y-auto overflow-x-hidden ">
         {toasts.map((toast) => (
           <div
             key={toast.id}
             onClick={() => removeToast(toast.id)}
             className={`
-              pointer-events-auto p-4 rounded-lg shadow-lg text-white font-medium 
+              pointer-events-auto p-4 rounded-lg shadow-lg text-white font-medium border border-white/10
               transform transition-all duration-300 animate-fade-in cursor-pointer
               hover:opacity-90 active:scale-[0.98] select-none
               ${toast.type === 'error' ? 'bg-rose-500' : ''}
-              ${toast.type === 'success' ? 'bg-brand' : ''}
+              ${toast.type === 'success' ? 'bg-zinc-800' : ''}
               ${toast.type === 'info' ? 'bg-blue-500' : ''}
             `}
             role="button"
