@@ -13,14 +13,7 @@ export type ExerciseCategory = 'strength' | 'cardio' | 'mobility' | 'isometric' 
 
 export type ExerciseDifficulty = 'Beginner' | 'Intermediate' | 'Advanced';
 
-export interface TrackingField {
-  _id: string;
-  name: string;
-  type?: TrackingType;
-  target: number;
-  unit?: Unit;
-  isRequired: boolean;
-}
+
 
 export interface Exercise {
   _id: string;
@@ -81,21 +74,37 @@ export interface Equipment {
   updatedAt: string;
 }
 
-export interface PlannedSet {
-  _id: string;              
-  type: 'Warmup' | 'Normal' | 'Drop' | 'Failure';
-  targets: Record<string, number | string>; 
-}
 
 export interface WorkoutExercise {
-  _id: string;              
+  _id: string;  
+  name: string;
+  tags: string[];
+  muscles: MuscleDefinition[];            
   exerciseId: string;       // Reference to Exercise._id
   order: number;            
   sets: PlannedSet[];       
   rest: number;             // In seconds
   notes?: string;           
-  isOptional: boolean;      // Great addition for time-crunched days
+  isOptional: boolean;     
 }
+
+export interface PlannedSet {
+  _id: string;              
+  type?: 'Warmup' | 'Normal' | 'Drop' | 'Failure';
+  order: number;
+  fields: TrackingField[];
+}
+
+
+export interface TrackingField {
+  _id: string;
+  name: string;
+  type?: TrackingType;
+  target: number;
+  unit?: Unit;
+  isRequired: boolean;
+}
+
 
 export interface Workout {
   _id: string;

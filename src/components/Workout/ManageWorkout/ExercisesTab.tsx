@@ -1,7 +1,9 @@
 import { useState } from "react"
 import { ExerciseDrawer } from "../../modals/ExerciseDrawer";
-import type { Exercise } from "../../../types/types";
+import type { Exercise, WorkoutExercise } from "../../../types/types";
 import { useToast } from "../../../context/ToastContext";
+import SmartExerciseCard from "./SmartExerciseCard";
+import ObjectID from "bson-objectid";
 
 export interface WorkoutItem extends Exercise {
     type: string;
@@ -15,11 +17,23 @@ export const ExercisesTab = () => {
 
     const [showExerciseDrawer, setShowExerciseDrawer] = useState(false);
 
-    const [items, setItems] = useState<WorkoutItem[]>([]);
+    const [items, setItems] = useState<WorkoutExercise[]>([]);
 
 
     const handleAddExercise = (exercise: WorkoutItem) => {
-        setItems(prev=>[...prev, exercise]);
+        const convertedExercise: WorkoutExercise = {
+            _id: ObjectID().toHexString(),
+            name: exercise.name,
+            type: 'exercise',
+            tags: exercise.tags ?? [],
+            muscles: exercise.muscles ?? [],
+            exerciseId: exercise._id,
+            order: items.length, 
+            sets: [{_id: ObjectID().toHexString(), order: 1, fields: exercise.trackingFields || []}],
+            rest: 90,
+            isOptional: false
+        }
+        setItems(prev=>[...prev, convertedExercise]);
         addToast(`Added ${exercise.name}!`);
     }
 
@@ -29,7 +43,7 @@ export const ExercisesTab = () => {
                 <p>Total exercises: 15</p>
             </div>
             <div className="w-full h-full flex flex-col gap-2">
-                {items?.length > 0 ? items.map(item=><div key={item._id}>{item.name}</div>) : <p>No exercises added</p>}
+                {items?.length > 0 ? items.map((item: WorkoutExercise)=><SmartExerciseCard key={item._id} exercise={item} />) : <p>No exercises added</p>}
             </div>
             <div className="w-full flex items-center justify-center gap-2">
                 <button className="h-full px-4 roudned bg-zinc-500 rounded">Add Break</button>
