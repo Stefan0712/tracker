@@ -77,7 +77,9 @@ export interface Equipment {
 
 export interface WorkoutExercise {
   _id: string;  
+  sourceId: string;
   name: string;
+  type: string;
   tags: string[];
   muscles: MuscleDefinition[];            
   exerciseId: string;       // Reference to Exercise._id
@@ -85,7 +87,8 @@ export interface WorkoutExercise {
   sets: PlannedSet[];       
   rest: number;             // In seconds
   notes?: string;           
-  isOptional: boolean;     
+  isOptional: boolean;    
+  trackingFields: TrackingField[]; 
 }
 
 export interface PlannedSet {
@@ -103,6 +106,7 @@ export interface TrackingField {
   target: number;
   unit?: Unit;
   isRequired: boolean;
+  value: number;
 }
 
 

@@ -1,12 +1,17 @@
-import { BicepsFlexed, Info, Tag } from "lucide-react";
+import { BicepsFlexed, Info, Plus, Tag } from "lucide-react";
 import { useState } from "react";
-import type { WorkoutExercise } from "../../../types/types";
+import type { PlannedSet, TrackingField, WorkoutExercise } from "../../../types/types";
+import ObjectID from "bson-objectid";
 
 
 interface IProps {
     exercise: WorkoutExercise;
+    handleAddSet: (exerciseId: string, newSet: PlannedSet) => void;
+    handleUpdateSet: (exerciseId: string, setId: string, fieldId: string, value: number) => void;
 }
-const SmartExerciseCard: React.FC<IProps> = ({exercise}) => {
+
+
+const SmartExerciseCard: React.FC<IProps> = ({exercise, handleAddSet, handleUpdateSet}) => {
 
 
     const [showDetails, setShowDetails] = useState(false);
@@ -15,6 +20,16 @@ const SmartExerciseCard: React.FC<IProps> = ({exercise}) => {
     const handleShowDetails = () => {
         console.log(exercise);
         setShowDetails(prev=>!prev);
+    }
+
+    const addSet = () => {
+        const newSet = {
+            _id: ObjectID().toHexString(), 
+            order: exercise.sets.length, 
+            fields: [...exercise.trackingFields]
+        }
+        console.log(exercise._id, newSet)
+        handleAddSet(exercise._id, newSet);
     }
 
     if (!exercise || exercise === null || exercise === undefined) return;
@@ -44,25 +59,29 @@ const SmartExerciseCard: React.FC<IProps> = ({exercise}) => {
                     </div>
                 </div>
             </div> : null}
-            <div className="flex flex-row gap-2 w-full overflow-hidden">
-                <select>
-                    {Array.from({ length: 20 }, (_, i) => i + 1).map((num) => (
-                        <option key={num} value={num} className="bg-zinc-900">
-                            {num}
-                        </option>
-                    ))}
-                </select>
-                {exercise.trackingFields && exercise.trackingFields.length > 0 ? exercise.trackingFields.map((field, index)=> <div className="flex gap-2 items-center" key={field._id}>
+            <div className="w-full flex flex-col gap-1">
+                {exercise && exercise.sets && exercise.sets.length > 0 ? exercise.sets.map(set=><div key={set._id} className="flex flex-row gap-2 w-full overflow-hidden">
+                {set.fields && set.fields.length > 0 ? set.fields.map((field: TrackingField)=> <div className="flex gap-2 items-center" key={field._id}>
                     {field.type === 'boolean' ? 
                     <p>{field.target === 0 ? "NO" : "YES"}</p>:
-                    <input
-                        placeholder={field.unit}
-                        type={`${field.type}`}
-                        className="border border-white/20 rounded px-1 max-w-[50px]"
-                    />
+                        <fieldset className="flex flex-col text-sm items-center justify-center gap-1">
+                            <label className="opacity-40">{field.name}</label>
+                            <input
+                                placeholder={field.unit}
+                                type={`${field.type}`}
+                                value={field.value ?? 0}
+                                onChange={(e)=>handleUpdateSet(exercise._id, set._id, field._id, parseInt(e.target.value) ?? 0)}
+                                className="border border-white/20 rounded p-1 max-w-12.5"
+                            />
+                        </fieldset>
                     }
                 </div>) : <p>No fields</p>}
+            </div>) : <p>No sets added</p>}
+                <button onClick={addSet}>
+                    <Plus />
+                </button>
             </div>
+            
         </div>
     )
 }

@@ -1,6 +1,6 @@
 import { BicepsFlexed, Copy, Plus, Tag } from "lucide-react";
 import { db } from "../../db";
-import type { Exercise } from "../../types/types"
+import type { Exercise, WorkoutExercise } from "../../types/types"
 import type { WorkoutItem } from "../Workout/ManageWorkout/ExercisesTab";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useState } from "react";
@@ -8,7 +8,7 @@ import ObjectID from "bson-objectid";
 
 
 interface IProps {
-    existingExercises?: WorkoutItem[];
+    existingExercises?: WorkoutExercise[];
     addExercise: (exercise: WorkoutItem) => void;
     close: ()=>void;
 }
