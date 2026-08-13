@@ -2,12 +2,14 @@ import { useEffect, useState } from "react";
 import { db } from "../../db";
 import type { Exercise } from "../../types/types";
 import { Link } from "react-router-dom";
+import { ChevronLeft } from "lucide-react";
 
 interface ExerciseProps {
     id: string;
+    close: ()=>void;
 }
 
-const ViewExercise: React.FC<ExerciseProps> = ({ id }) => {
+const ViewExercise: React.FC<ExerciseProps> = ({ id, close }) => {
     const [exercise, setExercise] = useState<Exercise | null>(null);
     const [loading, setLoading] = useState(true);
 
@@ -39,7 +41,13 @@ const ViewExercise: React.FC<ExerciseProps> = ({ id }) => {
 
     return (
         <div className="w-full h-full absolute top-0 left-0 bg-zinc-950 p-4 z-50 text-white flex flex-col gap-2 overflow-y-auto">
-            <h1>{exercise.name}</h1>
+            <div className="w-full h-[50px] grid grid-cols-[50px_1fr]">
+                <button onClick={close}>
+                    <ChevronLeft />
+                </button>
+                <h1>{exercise.name}</h1>
+                <Link to={`/exercise/${exercise._id}/start`}>Start</Link>
+            </div>
             <div className={`${section}`}>
                 <label>Exercise ID</label>
                 <b className="text-zinc-500 text-sm">{id}</b>

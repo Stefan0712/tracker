@@ -103,10 +103,10 @@ export interface TrackingField {
   _id: string;
   name: string;
   type?: TrackingType;
-  target: number;
+  target?: number;
   unit?: Unit;
   isRequired: boolean;
-  value: number;
+  value?: number;
 }
 
 
@@ -114,8 +114,11 @@ export interface Workout {
   _id: string;
   name: string;             
   description?: string;
-  notes?: string;           
+  notes?: string[];           
   exercises: WorkoutExercise[];
+  equipment: Equipment[];
+
+  muscles: MuscleDefinition[];
   
   estimatedDuration?: number; 
   tags: string[];             
@@ -132,8 +135,8 @@ export interface Workout {
   isPinned: boolean;        // For public profile showcase
   isFavorite: boolean;      // For private library sorting
   
-  createdAt: string;
-  updatedAt: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 
@@ -144,4 +147,28 @@ export interface TagSuggestion {
   displayName: string;// Display version
   usageCount: number; // To sort autocomplete by most used
   isCustom: boolean;  
+}
+
+export interface RunningSet {
+  _id: string;
+  order: number;
+  fields: TrackingField[];
+}
+
+export interface PlannedSet {
+  _id: string;              
+  type?: 'Warmup' | 'Normal' | 'Drop' | 'Failure';
+  order: number;
+  fields: TrackingField[];
+}
+
+
+export interface TrackingField {
+  _id: string;
+  name: string;
+  type?: TrackingType;
+  target?: number;
+  unit?: Unit;
+  isRequired: boolean;
+  value?: number;
 }

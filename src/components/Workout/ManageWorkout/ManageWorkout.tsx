@@ -1,15 +1,18 @@
 import { useState } from "react"
-import type { Equipment, MuscleDefinition, WorkoutExercise } from "../../../types/types";
-import { Link } from "react-router-dom";
+import type { Equipment, MuscleDefinition, Workout, WorkoutExercise } from "../../../types/types";
+import { Link, useNavigate } from "react-router-dom";
 import { ArrowLeft, Save } from "lucide-react";
 import { DetailsTab } from "./DetailsTab";
 import { ExercisesTab } from "./ExercisesTab";
 import { useToast } from "../../../context/ToastContext";
+import { db } from "../../../db";
+import ObjectID from "bson-objectid";
 
 
 const ManageWorkout = () => {
 
     const { addToast } = useToast();
+    const navigate = useNavigate();
 
     const [currentTab, setCurrentTab] = useState('details')
 
@@ -30,9 +33,50 @@ const ManageWorkout = () => {
     
     const [notes, setNotes] = useState<string[]>([]);
 
+    // Make target optional and remove mandatory targets for individual sets and reps. 
+    // Just use a simple input for the number of sets and make individual input of exercises visible only if target is enabled for that exercise.
+    // Don't show individual inputs by default
+    // Move Add break/ Add Exercise button to inside the list
+    // Add input for rest time for each exercise
+    // Show only input names bt default
+    
+
+    const handleSave = async () => {
+
+        const newWorkout: Workout = {
+            _id: ObjectID().toHexString(),
+            name,
+            description,
+            estimatedDuration,
+            imageUrl,
+            videoUrl,
+            exercises,
+            muscles,
+            tags,
+            equipment,
+            notes,
 
 
-
+            // Workout Metadata
+            authorId: 'local-user-id',
+            isCustom: true,
+            isPrivate: true,
+            isShared: false,
+            isPinned: false,
+            isFavorite: true,
+            createdAt: new Date(),
+            updatedAt: new Date()
+            
+        }
+        try {
+            await db.workouts.put(newWorkout);
+            addToast("Workout successfully created", "success");
+            navigate('/library')
+        } catch (error) {
+            console.error(error)
+            addToast("Failed to created workout", 'error')
+        }
+    }
 
 
 
@@ -41,7 +85,12 @@ const ManageWorkout = () => {
             <div className="h-(--header-height) w-full grid grid-cols-[50px_1fr_50px] items-center justify-center px-2">
                 <Link to={'/library'} className="flex items-center justify-center"><ArrowLeft /></Link>
                 <h1 className="w-full text-center">New Workout</h1>
-                <button className="flex items-center justify-center"><Save /></button>
+                <button 
+                    onClick={handleSave} 
+                    className="flex items-center justify-center"
+                >
+                    <Save />
+                </button>
             </div>
             <fieldset className="px-4 h-12.5">
                 <input className='text-input' placeholder="Workout Name" value={name} onChange={(e)=>setName(e.target.value)}/>
@@ -72,7 +121,8 @@ const ManageWorkout = () => {
                         setDescription={setDescription}
                     /> : 
                     <ExercisesTab 
-
+                        items={exercises}
+                        setItems={setExercises}
                     />
                 }
             </div>

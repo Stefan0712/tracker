@@ -1,13 +1,13 @@
-import { Database, Plus, PlusIcon, RefreshCcw } from "lucide-react"
+import { Database, PlusIcon, RefreshCcw } from "lucide-react"
 import { Link } from "react-router-dom";
 import { seedExercises } from "../../../helpers/seed";
 import { useEffect, useState } from "react";
 import { db } from "../../../db";
 import type { Exercise as IExercise, Workout } from "../../../types/types";
 import { useToast } from "../../../context/ToastContext";
-import Exercise from "./Exercise";
 import ViewExercise from "../../Exercise/ViewExercise";
 import NewLibraryItemMenu from "./NewLibraryItemMenu";
+import LibraryExercise from "./LibraryExercise";
 
 
 const Library = () => {
@@ -68,7 +68,7 @@ const Library = () => {
 
     return (
         <div className="content-container bg-main flex flex-col text-white">
-            {selectedExercise ? <ViewExercise id={selectedExercise} /> : null}
+            {selectedExercise ? <ViewExercise id={selectedExercise} close={()=>setSelectedExercise(null)}/> : null}
             <div className="w-full h-15 flex px-4 items-center justify-between">
                 <h1 className="font-bold text-lg">Library</h1>
                 <button onClick={fetchItems}>
@@ -99,7 +99,7 @@ const Library = () => {
 
             <div className="flex flex-col gap-2 overflow-y-auto overflow-x-hidden p-2">
                 {
-                    type === 'exercises' ? exercises?.length > 0 ? exercises.map(item=><Exercise key={item._id} showExercise={()=>setSelectedExercise(item._id)} exercise={item} />) : <p className="no-items-text">No items to show</p> : workouts?.length > 0 ? workouts.map(item=><MockItem type="workout" item={item} />) : <p className="no-items-text">No workouts</p>
+                    type === 'exercises' ? exercises?.length > 0 ? exercises.map(item=><LibraryExercise key={item._id} showExercise={()=>setSelectedExercise(item._id)} exercise={item} />) : <p className="no-items-text">No items to show</p> : workouts?.length > 0 ? workouts.map(item=><MockItem type="workout" item={item} />) : <p className="no-items-text">No workouts</p>
                 }
             </div>
 
@@ -125,6 +125,7 @@ const MockItem: React.FC<MockItem> = ({type, item}) => {
         <div className="w-full p-4 rounded border border-black-1 flex flex-col gap-2">
             <h1>{item.name}</h1>
             <b>{type}</b>
+            <Link to={`/workout/${item._id}/view`}>View Workout</Link>
         </div>
     )
 } 

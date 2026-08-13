@@ -4,6 +4,8 @@ import ManageExercise from './components/Exercise/ManageExercise';
 import { ToastProvider } from './context/ToastContext';
 import Nav from './components/Layout/Nav';
 import ManageWorkout from './components/Workout/ManageWorkout/ManageWorkout';
+import ViewWorkout from './components/Workout/ViewWorkout';
+import Exercise from './components/Exercise/Exercise';
 
 
 
@@ -19,9 +21,11 @@ function App() {
         </Route>
 
         <Route path='/exercise/new' element={<ManageExercise /> } />
+        <Route path='/exercise/:id/start' element={<Exercise /> } />
         <Route path='/exercise/:id/edit' element={<ManageExercise /> } />
 
         <Route path='/workout/new' element={<ManageWorkout /> } />
+        <Route path='/workout/:id/view' element={<ViewWorkout /> } />
 
 
       </Routes>

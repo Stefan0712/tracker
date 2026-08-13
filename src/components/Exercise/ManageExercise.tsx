@@ -45,7 +45,7 @@ const ManageExercise = () => {
     const [fieldName, setFieldName] = useState('')
     const [fieldTarget, setFieldTarget] = useState<number>(0)
     const [fieldUnit, setFieldUnit] = useState<NumberUnit | TimeUnit>('kg');
-
+    const [showTargetInput, setShowTargetInput] = useState(false);
 
 
     const [instructions, setInstructions] = useState<string[]>([]);
@@ -334,34 +334,41 @@ const ManageExercise = () => {
                                 </button>
                             </div>) : <p>No fields added.</p>}
                         </div>
-                        {showNewField ? <div className="w-full h-12.5 gap-2 items-center grid grid-cols-[2fr_1fr_1fr_40px]">
-                            <input 
-                                type="text" 
-                                className="text-input" 
-                                placeholder="Name" 
-                                onChange={(e)=>setFieldName(e.target.value)} 
-                                value={fieldName}
-                            />
-                            <input 
-                                type="number" 
-                                className="text-input" 
-                                placeholder="Target" 
-                                onChange={(e)=>setFieldTarget(parseInt(e.target.value))} 
-                                value={fieldTarget}
-                                
-                            />
-                            <div className="flex flex-col gap-1.5">
-                                <select 
-                                    value={fieldUnit}
-                                    onChange={(e) => setFieldUnit(e.target.value as Unit)}
-                                    className="option-input"
-                                >
-                                    {ALL_UNITS.map((unit) => (<option key={unit} value={unit}>{unit}</option>))}
-                                </select>
+                        {showNewField ? <div className="w-full h-18 gap-2 flex flex-col">
+                            <div className="items-center grid grid-cols-[2fr_1fr_1fr_40px] gap-2">
+                                <input 
+                                    type="text" 
+                                    className="text-input" 
+                                    placeholder="Name" 
+                                    onChange={(e)=>setFieldName(e.target.value)} 
+                                    value={fieldName}
+                                />
+                                {showTargetInput ? <input 
+                                    type="number" 
+                                    className="text-input" 
+                                    placeholder="Target" 
+                                    onChange={(e)=>setFieldTarget(parseInt(e.target.value))} 
+                                    value={fieldTarget}
+                                    
+                                /> : null}
+                                <div className="flex flex-col gap-1.5">
+                                    <select 
+                                        value={fieldUnit}
+                                        onChange={(e) => setFieldUnit(e.target.value as Unit)}
+                                        className="option-input"
+                                    >
+                                        {ALL_UNITS.map((unit) => (<option key={unit} value={unit}>{unit}</option>))}
+                                    </select>
+                                </div>
+                                <button className="w-full h-full flex items-center justify-center" onClick={handleAddField}>
+                                    <Plus />
+                                </button>
                             </div>
-                            <button className="w-full h-full flex items-center justify-center" onClick={handleAddField}>
-                                <Plus />
-                            </button>
+
+                            <fieldset className="flex gap-2 items-center">
+                                <input type="checkbox" checked={showTargetInput} onChange={(e)=>setShowTargetInput(e.target.checked)} />
+                                <label>Show target input</label>
+                            </fieldset>
                         </div> : null}
                     </fieldset>
 

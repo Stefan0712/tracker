@@ -6,7 +6,7 @@ interface IProps {
     showExercise: ()=>void;
 }
 
-const Exercise: React.FC<IProps> = ({exercise, showExercise}) => {
+const LibraryExercise: React.FC<IProps> = ({exercise, showExercise}) => {
 
     const DifficultyIcon =  exercise.difficulty === 'Advanced' ? <SignalHigh /> :
                             exercise.difficulty === 'Intermediate' ? <SignalMedium /> :
@@ -32,4 +32,4 @@ const Exercise: React.FC<IProps> = ({exercise, showExercise}) => {
     )
 }
 
-export default Exercise;
+export default LibraryExercise;
