@@ -40,11 +40,12 @@ const ViewWorkout = () => {
 
     return (
         <div className="w-full h-full absolute top-0 left-0 bg-zinc-950 p-4 z-50 text-white flex flex-col gap-2 overflow-y-auto">
-            <div className="w-full h-[50px] grid grid-cols-[50px_1fr]">
+            <div className="w-full h-12.5 grid grid-cols-[50px_1fr]">
                 <Link to={'/library'}>
                     <ChevronLeft />
                 </Link>
                 <h1>{workout.name}</h1>
+                <Link to={`/workout/${id}/start`}>Start</Link>
             </div>
             <div className={`${section}`} onClick={()=>console.log(workout)}>
                 <label>Workout ID</label>
@@ -117,7 +118,7 @@ const Exercise = ({exercise}: {exercise: WorkoutExercise}) => {
                 <h1>{exercise?.name}</h1>
                 <b>x {exercise.sets.length}</b>
             </div>
-            <div className="flex items-center gap-1">{exercise?.trackingFields?.map(field=><p className="bg-zinc-900 rounded px-2 py-1">{field?.name}</p>)}</div>
+            <div className="flex items-center gap-1">{exercise?.fields?.map(field=><p className="bg-zinc-900 rounded px-2 py-1">{field?.name}</p>)}</div>
         </div>
     )
 }

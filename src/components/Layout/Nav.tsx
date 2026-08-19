@@ -1,4 +1,4 @@
-import { Calendar, Home, List, Settings } from "lucide-react";
+import { Calendar, Home, List, Menu } from "lucide-react";
 import { Link } from "react-router-dom"
 
 const Nav = () => {
@@ -20,9 +20,9 @@ const Nav = () => {
                 <Calendar className='text-white/50' />
                 <span className={buttonText}>Plan</span>
             </Link>
-            <Link to="/settings" className={btnStyle}>
-                <Settings className='text-white/50' />
-                <span className={buttonText}>Settings</span>
+            <Link to="/menu" className={btnStyle}>
+                <Menu className='text-white/50' />
+                <span className={buttonText}>Menu</span>
             </Link>
         </nav>
     )

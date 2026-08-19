@@ -51,8 +51,8 @@ export function ToastProvider({ children }: ToastProviderProps) {
               transform transition-all duration-300 animate-fade-in cursor-pointer
               hover:opacity-90 active:scale-[0.98] select-none
               ${toast.type === 'error' ? 'bg-rose-500' : ''}
-              ${toast.type === 'success' ? 'bg-zinc-800' : ''}
-              ${toast.type === 'info' ? 'bg-blue-500' : ''}
+              ${toast.type === 'success' ? 'bg-green-600' : ''}
+              ${toast.type === 'info' ? 'bg-zinc-800' : ''}
             `}
             role="button"
             title="Click to dismiss"

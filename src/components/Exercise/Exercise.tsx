@@ -1,18 +1,27 @@
-import { ChevronLeft, ChevronRight, FastForward, Flag, Forward, Info, List, Notebook, Play, Plus, Rewind, RotateCcw, Save, StickyNote } from "lucide-react"
+import { Check, Flag, Info, List, Pause, Play, Plus, RotateCcw, Save, StickyNote } from "lucide-react"
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom"
-import { type RunningSet, type Exercise } from "../../types/types";
+import { useNavigate, useParams } from "react-router-dom"
+import { type RunningSet, type Exercise as IExercise, type Log } from "../../types/types";
 import { db } from "../../db";
 import ObjectID from "bson-objectid";
+import { useCountdown } from "../../hooks/useCountdown";
+import { useTimer } from "../../hooks/useTimer";
+import { useToast } from "../../context/ToastContext";
 
 
 const Exercise = () => {
 
     const {id} = useParams();
+    const {addToast} = useToast();
+    const navigate = useNavigate();
 
-    const [exercise, setExercise] = useState<Exercise | null>(null);
+    const {toggle, isRunning, formattedTime, seconds} = useTimer();
 
-    const [sets, setSets] = useState<RunningSet[]>([])
+    const [exercise, setExercise] = useState<IExercise | null>(null);
+
+    const [sets, setSets] = useState<RunningSet[]>([]);
+    
+    const startedAt = new Date();
 
     useEffect(()=>{
         if(id) {
@@ -46,12 +55,43 @@ const Exercise = () => {
         })
     }
 
+    const handleFinishExercise = async () => {
+        if(exercise) {
+            try {
+                const exerciseLog: Log = {
+                    _id: ObjectID().toHexString(),
+                    createdAt: new Date(),
+                    type: 'exercise',
+                    data: {
+                        sourceId: exercise?._id,
+                        sets,
+                        startedAt,
+                        finishedAt: new Date(),
+                        duration: seconds,
+                        name: exercise?.name,
+                        muscles: exercise?.muscles || [],
+                        tags: exercise?.tags || [],
+                        rest: 90,
+                    }
+                }
+                await db.logs.add(exerciseLog);
+                navigate('/library');
+                addToast("Exercise finished!", "success");
+            } catch (error) {
+                console.error(error)
+                addToast("Failed to finish exercise", "error")
+            }
+            
+        }
+
+    }
+
     if (!exercise) return <h1>Loading exercise...</h1>
     return (
         <div className="w-screen h-screen grid grid-rows-[50px_1fr_50px_50px] bg-zinc-900 text-white">
-            <div className="h-[50px] grid grid-cols-[1fr_50px] p-2 gap-2">
+            <div className="h-12.5 grid grid-cols-[1fr_50px] p-2 gap-2">
                 <h1>{exercise.name}</h1>
-                <button>
+                <button onClick={handleFinishExercise}>
                     <Flag />
                 </button>
             </div>
@@ -67,7 +107,12 @@ const Exercise = () => {
                 <button className="px-2 py-1"><Info /></button>
                 <button className="px-2 py-1"><List /></button>
                 <button className="px-2 py-1 mr-auto"><StickyNote /></button>
-                <button className="px-2 py-1"><Play /></button>
+                <div className="flex items-center justify-center gap-2">
+                    <p>{formattedTime}</p>
+                    <button className="px-2 py-1" onClick={toggle}>
+                        {isRunning ? <Pause /> : <Play />}
+                    </button>
+                </div>
             </div>
         </div>
     )
@@ -78,6 +123,8 @@ export default Exercise;
 
 
 const Set = ({set, handleUpdateValue}: {set: RunningSet, handleUpdateValue: (setId: string, fieldId: string, newValue: number) => void}) => {
+
+    const {timeLeft, isRunning, isCompleted, toggle, reset } = useCountdown(90)
 
     return (
         <div className="w-full flex flex-col items-center gap-2 border border-white/10 rounded-xl" onClick={()=>console.log(set)}>
@@ -107,22 +154,21 @@ const Set = ({set, handleUpdateValue}: {set: RunningSet, handleUpdateValue: (set
             <div className="flex flex-col w-full bg-zinc-800 rounded p-2 gap-2">
                 <div className="w-full flex items-center justify-between">
                     <label className="text-sm text-white/50">Rest</label>
-                    <b>90 / 90 s</b>
                 </div>
-                <div className="w-full h-[15px] flex items-center justify-start">
-                    <div className="w-[50%] h-full bg-orange-300 rounded">
+                <div className={`w-full h-2 flex items-center justify-start bg-gray-400/10 rounded`}>
+                    <div 
+                        style={{ width: `${(1 - timeLeft / 90) * 100}%` }}
+                        className="h-full bg-orange-500 rounded">
 
                     </div>
                 </div>
                 <div className="w-full flex items-center justify-between">
-                    <button>
+                    <button onClick={()=>reset()}>
                         <RotateCcw />
                     </button>
-                    <button>
-                        <Play />
-                    </button>
-                    <button>
-                        <FastForward />
+                    {isCompleted ? <Check /> : <b>{timeLeft} / 90 s</b>}
+                    <button onClick={toggle}>
+                        {isRunning ? <Pause /> : <Play />}
                     </button>
                 </div>
             </div>

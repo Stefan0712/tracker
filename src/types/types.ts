@@ -82,10 +82,10 @@ export interface WorkoutExercise {
   type: string;
   tags: string[];
   muscles: MuscleDefinition[];            
+  rest: number;             // In seconds
   exerciseId: string;       // Reference to Exercise._id
   order: number;            
   sets: PlannedSet[];       
-  rest: number;             // In seconds
   notes?: string;           
   isOptional: boolean;    
   trackingFields: TrackingField[]; 
@@ -172,3 +172,64 @@ export interface TrackingField {
   isRequired: boolean;
   value?: number;
 }
+
+// Common metadata shared across EVERY log type
+interface BaseLog {
+  _id: string;
+  createdAt: Date;
+}
+
+// Specific log payload definitions
+export interface ExerciseLogData {
+  startedAt: Date;
+  finishedAt: Date;
+  sets: RunningSet[];
+  duration: number; // in seconds
+  sourceId: string;
+  name: string;
+  tags: string[];
+  muscles: MuscleDefinition[];
+  rest: number; // in seconds
+}
+
+export interface WorkoutLogData {
+  startedAt: Date;
+  finishedAt: Date;
+  duration: number;
+  sourceId: string;
+  name: string;
+  content: WorkoutExercise[];
+
+  tags: string[];
+  muscles: MuscleDefinition[];
+}
+
+export interface BreakLogData {
+  startedAt: Date;
+  finishedAt: Date;
+  duration: number;
+}
+
+export interface BodyWeightLogData {
+  weight: number;
+  unit: "kg" | "lbs";
+  notes?: string;
+}
+
+// Typed Log variants
+export interface ExerciseLogItem extends BaseLog {
+  type: "exercise";
+  data: ExerciseLogData;
+}
+
+export interface BreakLogItem extends BaseLog {
+  type: "break";
+  data: BreakLogData;
+}
+
+export interface WorkoutLogItem extends BaseLog {
+  type: "workout";
+  data: WorkoutLogData;
+}
+
+export type Log = ExerciseLogItem | BreakLogItem | WorkoutLogItem;

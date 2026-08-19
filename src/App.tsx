@@ -6,6 +6,9 @@ import Nav from './components/Layout/Nav';
 import ManageWorkout from './components/Workout/ManageWorkout/ManageWorkout';
 import ViewWorkout from './components/Workout/ViewWorkout';
 import Exercise from './components/Exercise/Exercise';
+import Menu from './components/Menu/Menu';
+import { Logs } from './components/Logs/Logs';
+import Workout from './components/Workout/Workout';
 
 
 
@@ -17,7 +20,8 @@ function App() {
           <Route index element={<div className="p-4">Home Dashboard</div>} /> 
           <Route path="/library" element={<Library />} />
           <Route path="/plan" element={<div className="p-4">Calendar Page</div>} />
-          <Route path="/settings" element={<div className="p-4">Settings</div>} />
+          <Route path="/menu" element={<Menu />} />
+          <Route path="/logs" element={<Logs />} />
         </Route>
 
         <Route path='/exercise/new' element={<ManageExercise /> } />
@@ -25,6 +29,7 @@ function App() {
         <Route path='/exercise/:id/edit' element={<ManageExercise /> } />
 
         <Route path='/workout/new' element={<ManageWorkout /> } />
+        <Route path='/workout/:id/start' element={<Workout /> } />
         <Route path='/workout/:id/view' element={<ViewWorkout /> } />
 
 

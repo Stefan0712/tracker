@@ -4,7 +4,8 @@ import type {
   Workout, 
   MuscleDefinition, 
   Equipment, 
-  TagSuggestion 
+  TagSuggestion, 
+  Log
 } from './types/types';
 
 export class FitnessDatabase extends Dexie {
@@ -13,6 +14,7 @@ export class FitnessDatabase extends Dexie {
   muscles!: Table<MuscleDefinition, string>;
   equipment!: Table<Equipment, string>;
   tagSuggestions!: Table<TagSuggestion, string>;
+  logs!: Table<Log, string>
 
   constructor() {
     super('FitnessAppDB');
@@ -23,6 +25,14 @@ export class FitnessDatabase extends Dexie {
       muscles: '_id, region, group, isCustom',
       equipment: '_id, isCustom',
       tagSuggestions: '_id, &name, usageCount, isCustom'
+    });
+    this.version(2).stores({
+      exercises: '_id, category, authorId, isPrivate, isCurated, *tags, createdAt',
+      workouts: '_id, authorId, isFavorite, isPinned, *tags, createdAt',
+      muscles: '_id, region, group, isCustom',
+      equipment: '_id, isCustom',
+      tagSuggestions: '_id, &name, usageCount, isCustom',
+      logs: '_id, type, createdAt'
     });
   }
 }
