@@ -1,4 +1,4 @@
-import { Check, ChevronLeft, ChevronRight, Flag, Info, List, Pause, Play, Plus, RotateCcw, Save, StickyNote } from "lucide-react"
+import { Check, ChevronLeft, ChevronRight, Flag, Pause, Play, Plus, RotateCcw, Save } from "lucide-react"
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import { type RunningSet, type Log, type Workout as IWorkout, type WorkoutExercise } from "../../types/types";
@@ -7,6 +7,7 @@ import ObjectID from "bson-objectid";
 import { useCountdown } from "../../hooks/useCountdown";
 import { useTimer } from "../../hooks/useTimer";
 import { useToast } from "../../context/ToastContext";
+import WorkoutPages from "./WorkoutPages";
 
 
 const Workout = () => {
@@ -15,7 +16,9 @@ const Workout = () => {
     const {addToast} = useToast();
     const navigate = useNavigate();
 
-    const {toggle, isRunning, formattedTime, seconds} = useTimer();
+    const {formattedTime, toggle, isRunning, seconds} = useTimer();
+
+    const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
     const [workout, setWorkout] = useState<IWorkout | null>(null);
     const [exercises, setExercises] = useState<WorkoutExercise[]>([]);
@@ -123,7 +126,7 @@ const Workout = () => {
 
     }
 
-    const currentExercise = useMemo(()=>{
+    const currentExercise: WorkoutExercise | undefined = useMemo(()=>{
         return exercises.find(item=>item._id === selectedExerciseId);
     },[exercises, selectedExerciseId])
 
@@ -144,7 +147,7 @@ const Workout = () => {
 
     if (!workout) return <h1>Loading exercise...</h1>
     return (
-        <div className="w-screen h-screen grid grid-rows-[50px_50px_1fr_50px_50px] bg-zinc-900 text-white">
+        <div className={`w-screen h-screen grid ${isExpanded ? 'grid-rows-[50px_50px_1fr_1fr]' : 'grid-rows-[50px_50px_1fr_50px] transition-all'} bg-zinc-900 text-white`}>
             <div className="h-12.5 grid grid-cols-[1fr_50px] p-2 gap-2">
                 <h1>{workout.name}</h1>
                 <button onClick={handleFinishWorkout}>
@@ -173,16 +176,18 @@ const Workout = () => {
                     <button className="flex gap-1 items-center justify-center" onClick={()=>handleAddSet(selectedExerciseId)}><Plus size={12} /> <p>Set</p> </button>
                 </div>
             </div>
-            <div className="w-full h-12.5 flex gap-1 items-center bg-zinc-800">
-                <button className="px-2 py-1"><Info /></button>
-                <button className="px-2 py-1"><List /></button>
-                <button className="px-2 py-1 mr-auto"><StickyNote /></button>
-                <div className="flex items-center justify-center gap-2">
-                    <p>{formattedTime}</p>
-                    <button className="px-2 py-1" onClick={toggle}>
-                        {isRunning ? <Pause /> : <Play />}
-                    </button>
-                </div>
+            <div className={`w-full ${isExpanded ? 'h-full' : 'h-[50px]'} flex justify-center items-center bg-zinc-800 overflow-hidden`}>
+                {   
+                    currentExercise ? <WorkoutPages
+                        exercise={currentExercise}
+                        exercises={exercises}
+                        formattedTime={formattedTime}
+                        toggle={toggle}
+                        isRunning={isRunning}
+                        expand={()=>setIsExpanded(true)}
+                        close={()=>setIsExpanded(false)}
+                    /> : null
+                }
             </div>
         </div>
     )
