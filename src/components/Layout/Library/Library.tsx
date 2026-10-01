@@ -90,9 +90,6 @@ const Library = () => {
                         Workouts
                     </button>
                 </div>
-                <button onClick={seedExercises}>
-                    <Database />
-                </button>
             </div>
 
             {/* Container for items */}
