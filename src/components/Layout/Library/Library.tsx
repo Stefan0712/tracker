@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { db } from "../../../db";
 import type { Exercise as IExercise, Workout } from "../../../types/types";
 import { useToast } from "../../../context/ToastContext";
-import ViewExercise from "../../Exercise/ViewExercise";
+import ViewExercise from "../../Exercise/ViewExercise/ViewExercise";
 import NewLibraryItemMenu from "./NewLibraryItemMenu";
 import LibraryExercise from "./LibraryExercise";
 

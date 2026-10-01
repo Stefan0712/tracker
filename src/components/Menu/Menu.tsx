@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { resetExercisesDatabase, resetWorkoutsDatabase } from "../../helpers/seed";
 
 
 
@@ -13,6 +14,8 @@ const Menu = () => {
             <div className="flex flex-col gap-2 p-3 ">
                 <Link className="bg-zinc-950 rounded p-2" to={'/logs'}>Logs</Link>
             </div>
+            <button onClick={resetExercisesDatabase}>Reset Exercises</button>
+            <button onClick={resetWorkoutsDatabase}>Reset Workouts</button>
         </div>
     )
 }
