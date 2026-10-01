@@ -1,4 +1,4 @@
-import { Check, ChevronLeft, ChevronRight, Flag, Pause, Play, Plus, RotateCcw, Save } from "lucide-react"
+import { Check, ChevronLeft, ChevronRight, Pause, Play, Plus, RotateCcw, Save } from "lucide-react"
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom"
 import { type RunningSet, type Log, type Workout as IWorkout, type WorkoutExercise } from "../../types/types";
@@ -7,7 +7,7 @@ import ObjectID from "bson-objectid";
 import { useCountdown } from "../../hooks/useCountdown";
 import { useTimer } from "../../hooks/useTimer";
 import { useToast } from "../../context/ToastContext";
-import WorkoutPages from "./WorkoutPages";
+import WorkoutPages from "./WorkoutPages/WorkoutPages";
 
 
 const Workout = () => {
@@ -147,23 +147,10 @@ const Workout = () => {
 
     if (!workout) return <h1>Loading exercise...</h1>
     return (
-        <div className={`w-screen h-screen grid ${isExpanded ? 'grid-rows-[50px_50px_1fr_1fr]' : 'grid-rows-[50px_50px_1fr_50px] transition-all'} bg-zinc-900 text-white`}>
+        <div className={`w-screen h-screen grid ${isExpanded ? 'grid-rows-[50px_1fr_50px_1fr]' : 'grid-rows-[50px_1fr_50px_50px] transition-all'} bg-zinc-900 text-white`}>
             <div className="h-12.5 grid grid-cols-[1fr_50px] p-2 gap-2">
                 <h1>{workout.name}</h1>
-                <button onClick={handleFinishWorkout}>
-                    <Flag />
-                </button>
-            </div>
-            <div className="w-full h-12.5 grid grid-cols-[100px_1fr_100px] items-center justify-center">
-                <button className="flex flex-col items-center justify-center" onClick={()=>prevExercise ? setSelectedExerciseId(prevExercise._id) : null}>
-                    <ChevronLeft />
-                    <p className="text-sm opacity-50 truncate max-w-25">{prevExercise?.name || 'Start'}</p>
-                </button>
-                <h1 className="flex items-center justify-center" onClick={()=>console.log(currentExercise)}>{currentExercise?.name || "Unnamed Exercise"}</h1>
-                <button className="flex flex-col items-center justify-center" onClick={()=>nextExercise ? setSelectedExerciseId(nextExercise._id) : null}>
-                    <ChevronRight />
-                    <p className="text-sm opacity-50 truncate max-w-25">{nextExercise?.name || 'End'}</p>
-                </button>
+                <button onClick={handleFinishWorkout}>Finish</button>
             </div>
             <div className="w-full h-full flex flex-col overflow-y-auto p-3 gap-4">
                 {currentExercise?.sets && currentExercise.sets.length > 0
@@ -176,7 +163,16 @@ const Workout = () => {
                     <button className="flex gap-1 items-center justify-center" onClick={()=>handleAddSet(selectedExerciseId)}><Plus size={12} /> <p>Set</p> </button>
                 </div>
             </div>
-            <div className={`w-full ${isExpanded ? 'h-full' : 'h-[50px]'} flex justify-center items-center bg-zinc-800 overflow-hidden`}>
+            <div className="w-full h-12.5 flex items-center gap-2">
+                <h1 className="flex items-center justify-center" onClick={()=>console.log(currentExercise)}>{currentExercise?.name || "Unnamed Exercise"}</h1>
+                <button className="ml-auto" onClick={()=>prevExercise ? setSelectedExerciseId(prevExercise._id) : null}>
+                    <ChevronLeft />
+                </button>
+                <button onClick={()=>nextExercise ? setSelectedExerciseId(nextExercise._id) : null}>
+                    <ChevronRight />
+                </button>
+            </div>
+            <div className={`w-full ${isExpanded ? 'h-full' : 'h-12.5'} flex justify-center items-center bg-zinc-800 overflow-hidden`}>
                 {   
                     currentExercise ? <WorkoutPages
                         exercise={currentExercise}
@@ -210,7 +206,6 @@ const Set = ({set, handleUpdateValue, exerciseId}: {set: RunningSet, handleUpdat
                 </button>
             </div>
             <div className="w-full flex-col gap-2 bg-zinc-800 rounded p-2">
-                <label className="text-sm text-white/50">Fields</label>
                 <div className="w-full flex gap-2">
                     {set.fields.map(field=>
                         <div key={field._id} className="flex flex-col gap-1 items-center justify-center">
@@ -226,6 +221,7 @@ const Set = ({set, handleUpdateValue, exerciseId}: {set: RunningSet, handleUpdat
                     )}
                 </div>
             </div>
+            
             <div className="flex flex-col w-full bg-zinc-800 rounded p-2 gap-2">
                 <div className="w-full flex items-center justify-between">
                     <label className="text-sm text-white/50">Rest</label>

@@ -1,6 +1,5 @@
-import { Database, PlusIcon, RefreshCcw } from "lucide-react"
+import { PlusIcon, RefreshCcw } from "lucide-react"
 import { Link } from "react-router-dom";
-import { seedExercises } from "../../../helpers/seed";
 import { useEffect, useState } from "react";
 import { db } from "../../../db";
 import type { Exercise as IExercise, Workout } from "../../../types/types";
