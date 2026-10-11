@@ -1,6 +1,6 @@
-import { Check, ChevronLeft, ChevronRight, Pause, Play, Plus, RotateCcw, Save } from "lucide-react"
+import { Check, ChevronLeft, ChevronRight, Home, Pause, Play, Plus, RotateCcw, Save } from "lucide-react"
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom"
+import { Link, useNavigate, useParams } from "react-router-dom"
 import { type RunningSet, type Log, type Workout as IWorkout, type WorkoutExercise } from "../../types/types";
 import { db } from "../../db";
 import ObjectID from "bson-objectid";
@@ -148,8 +148,11 @@ const Workout = () => {
     if (!workout) return <h1>Loading exercise...</h1>
     return (
         <div className={`w-screen h-screen grid ${isExpanded ? 'grid-rows-[50px_1fr_50px_1fr]' : 'grid-rows-[50px_1fr_50px_50px] transition-all'} bg-zinc-900 text-white`}>
-            <div className="h-12.5 grid grid-cols-[1fr_50px] p-2 gap-2">
-                <h1>{workout.name}</h1>
+            <div className="h-12.5 grid grid-cols-[50px_1fr_50px] p-2 gap-2">
+                <Link to={'/library'} className="flex items-center justify-center">
+                    <Home size={20} />
+                </Link>
+                <h1 className="h-full text-center flex items-center justify-center">{workout.name}</h1>
                 <button onClick={handleFinishWorkout}>Finish</button>
             </div>
             <div className="w-full h-full flex flex-col overflow-y-auto p-3 gap-4">

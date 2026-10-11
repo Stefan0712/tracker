@@ -1,7 +1,7 @@
-import type { Exercise } from "../../../types/types"
+import type { WorkoutExercise } from "../../../types/types"
 
 
-const ExercisesList = ({exercises, exercise}: {exercises: Exercise[], exercise: Exercise}) => {
+const ExercisesList = ({exercises, exercise}: {exercises: WorkoutExercise[], exercise: WorkoutExercise}) => {
 
 
     return (

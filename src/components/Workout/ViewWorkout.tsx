@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { db } from "../../db";
-import { Link, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { ChevronLeft } from "lucide-react";
 import type { Workout, WorkoutExercise } from "../../types/types";
 
@@ -9,6 +9,7 @@ const ViewWorkout = () => {
     const [loading, setLoading] = useState(true);
 
     const {id} = useParams();
+    const navigate = useNavigate();
 
     useEffect(() => {
         setLoading(true);
@@ -25,6 +26,17 @@ const ViewWorkout = () => {
             });
         }
     }, [id]);
+
+    const handleDelete = async () => {
+        if (id) {
+            try {
+                db.workouts.delete(id);
+                navigate('/library')
+            } catch (error) {
+                console.error(error)
+            }
+        }
+    }
 
     if (loading) {
         return <div className="text-white p-4">Loading workout...</div>;
@@ -52,7 +64,7 @@ const ViewWorkout = () => {
                 <b className="text-zinc-500 text-sm">{id}</b>
             </div>
             <div className="w-full flex justify-between items-center gap-3">
-                <button className="border border-white/10 bg-red-500/90 px-2 text-white rounded">Delete</button>
+                <button className="border border-white/10 bg-red-500/90 px-2 text-white rounded" onClick={handleDelete}>Delete</button>
                 <Link to={id ? `/workout/${id}/edit` : '#'} className="border border-white/10 bg-zinc-500/90 px-2 text-white rounded">Edit</Link>
             </div>
             <div className={`${section}`}>

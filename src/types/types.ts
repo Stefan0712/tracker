@@ -86,7 +86,8 @@ export interface WorkoutExercise {
   exerciseId: string;       // Reference to Exercise._id
   order: number;            
   sets: PlannedSet[];       
-  notes?: string;           
+  notes?: string;         
+  instructions?: string[];  
   isOptional: boolean;    
   trackingFields: TrackingField[]; 
 }

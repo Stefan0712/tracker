@@ -1,4 +1,4 @@
-import { PlusIcon, RefreshCcw } from "lucide-react"
+import { BicepsFlexed, List, PlusIcon, RefreshCcw } from "lucide-react"
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { db } from "../../../db";
@@ -66,7 +66,7 @@ const Library = () => {
 
 
     return (
-        <div className="content-container bg-main flex flex-col text-white">
+        <div className="content-container bg-main grid grid-rows-[50px_50px_1fr] text-white">
             {selectedExercise ? <ViewExercise id={selectedExercise} close={()=>setSelectedExercise(null)}/> : null}
             <div className="w-full h-15 flex px-4 items-center justify-between">
                 <h1 className="font-bold text-lg">Library</h1>
@@ -74,21 +74,19 @@ const Library = () => {
                     <RefreshCcw />
                 </button>
             </div>
-            <div className="w-full flex items-center px-4 gap-2 overflow-y-auto">
-                <div className="flex items-center gap-2 mr-auto">
-                    <button 
-                        className={`h-10 px-2 border border-black-1 rounded-lg ${type === 'exercises' ? 'bg-zinc-900 text-white' : ''}`}
-                        onClick={()=>setType('exercises')}
-                    >
-                        Exercises
-                        </button>
-                    <button 
-                        className={`h-10 px-2 border border-black-1 rounded-lg ${type === 'workouts' ? 'bg-zinc-900 text-white' : ''}`}
-                        onClick={()=>setType('workouts')}
-                    >
-                        Workouts
-                    </button>
-                </div>
+            <div className="grid grid-cols-2 w-full h-12.5">
+                <button 
+                    className={`h-10 w-full border border-transparent border-b-transparent ${type === 'exercises' ? 'bg-zinc-900 text-white border-b-white' : ''}`}
+                    onClick={()=>setType('exercises')}
+                >
+                    Exercises
+                </button>
+                <button 
+                    className={`h-10 w-full border border-transparent border-b-transparent ${type === 'workouts' ? 'bg-zinc-900 text-white border-b-white' : ''}`}
+                    onClick={()=>setType('workouts')}
+                >
+                    Workouts
+                </button>
             </div>
 
             {/* Container for items */}
@@ -112,16 +110,30 @@ export default Library;
 
 interface MockItem {
     type: string;
-    item: IExercise | Workout;
+    item: Workout;
 }
-const MockItem: React.FC<MockItem> = ({type, item}) => {
+const MockItem: React.FC<MockItem> = ({item}) => {
 
 
     return (
-        <div className="w-full p-4 rounded border border-black-1 flex flex-col gap-2">
-            <h1>{item.name}</h1>
-            <b>{type}</b>
-            <Link to={`/workout/${item._id}/view`}>View Workout</Link>
-        </div>
+        <Link to={`/workout/${item._id}/view`} className="w-full p-4 rounded-lg border border-white/5 bg-zinc-950 flex flex-col gap-2">
+            <div className="w-full flex items-center justify-between">
+                <h1>{item.name}</h1>
+                <div className="flex gap-1 items-center">
+                    <List size={12}/>
+                    <p className="text-sm font-bold text-white/50">{item.exercises.length}</p>
+                </div>
+            </div>
+            <div className="w-full gap-2 grid grid-cols-[30px_1fr]">
+                <BicepsFlexed size={16} />
+                <div className="w-full flex flex-wrap gap-1 items-center">
+                    {item && item.muscles && item.muscles.length > 0 ? item.muscles?.map(i=><p key={i._id} className="px-2 py-1 text-nowrap text-xs opacity-50 bg-zinc-900 rounded">
+                        {i.name}
+                    </p>) 
+                    : <p className="opacity-50 text-xs">No muscles</p>}
+                </div>
+            </div>
+            
+        </Link>
     )
 } 
